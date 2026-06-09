@@ -1,4 +1,4 @@
-import Member from "../models/member.model.js";
+import Member from "./member.model.js";
 
 export const createMember = async (req, res) => {
   try {

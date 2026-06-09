@@ -1,23 +1,25 @@
 import mongoose from "mongoose";
 
-const memberSchema = new mongoose.Schema(
+const planSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
+      unique: true,
     },
 
-    email: {
-      type: String,
-    },
- 
-    mobile: {
-      type: String,
+    duration: {
+      type: Number,
+      required: true,
     },
 
-    plan: {
+    price: {
+      type: Number,
+      required: true,
+    },
+
+    description: {
       type: String,
-      default: "Basic",
     },
 
     status: {
@@ -30,7 +32,4 @@ const memberSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model(
-  "Member",
-  memberSchema
-);
+export default mongoose.model("Plan", planSchema);

@@ -5,8 +5,7 @@ import {
   getMembers,
   updateMember,
   deleteMember,
-} from "../controllers/member.controller.js";
-
+} from "./member.controller.js";
 const router = express.Router();
 
 router.post("/create", createMember);

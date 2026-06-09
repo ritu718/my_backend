@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import User from "../user/user.model.js";
 
 import bcrypt from "bcryptjs";
 
@@ -7,18 +7,33 @@ import jwt from "jsonwebtoken";
 
 // REGISTER
 export const registerUser = async (req, res) => {
+    console.log("🔥 NEW AUTH CONTROLLER");
   try {
 
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
-    const existingUser = await User.findOne({ email });
+if (!name || !email || !password || !confirmPassword) {
+  return res.status(400).json({
+    success: false,
+    message: "All fields are required",
+  });
+}
 
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
-    }
+if (password !== confirmPassword) {
+  return res.status(400).json({
+    success: false,
+    message: "Password and Confirm Password do not match",
+  });
+}
+
+const existingUser = await User.findOne({ email });
+
+if (existingUser) {
+  return res.status(400).json({
+    success: false,
+    message: "User already exists",
+  });
+}
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
