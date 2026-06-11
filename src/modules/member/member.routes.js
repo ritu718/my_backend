@@ -5,13 +5,19 @@ import {
   getMembers,
   updateMember,
   deleteMember,
+  getMemberById,
 } from "./member.controller.js";
+
 const router = express.Router();
 
-router.post("/create", createMember);
+router.post("/", createMember);
 
 router.get("/", getMembers);
-router.delete("/:id", deleteMember);
+
+router.get("/:id", getMemberById);
+
 router.put("/:id", updateMember);
-router.patch("/:id", updateMember);
+
+router.delete("/:id", deleteMember);
+
 export default router;

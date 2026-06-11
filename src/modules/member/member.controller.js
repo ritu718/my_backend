@@ -1,16 +1,22 @@
-import Member from "./member.model.js";
+import {
+  createMemberService,
+  getMembersService,
+  updateMemberService,
+  deleteMemberService,
+  getMemberByIdService,
+} from "./member.service.js";
 
 export const createMember = async (req, res) => {
   try {
-    const member = await Member.create(req.body);
+    const member = await createMemberService(req.body);
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: "Member Created",
+      message: "Member created successfully",
       data: member,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(400).json({
       success: false,
       message: error.message,
     });
@@ -19,35 +25,57 @@ export const createMember = async (req, res) => {
 
 export const getMembers = async (req, res) => {
   try {
-    const members = await Member.find();
+    const result = await getMembersService(req.query);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      count: members.length,
-      data: members,
+      count: result.totalMembers,
+      currentPage: result.currentPage,
+      totalPages: result.totalPages,
+      data: result.members,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
 
-export const updateMember = async (req, res) => {
+export const getMemberById = async (req, res) => {
   try {
-    const member = await Member.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
 
-    res.status(200).json({
+    const member = await getMemberByIdService(req.params.id);
+
+    return res.status(200).json({
       success: true,
       data: member,
     });
+
   } catch (error) {
-    res.status(500).json({
+
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
+
+export const updateMember = async (req, res) => {
+  try {
+    const member = await updateMemberService(
+      req.params.id,
+      req.body
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Member updated successfully",
+      data: member,
+    });
+  } catch (error) {
+    return res.status(400).json({
       success: false,
       message: error.message,
     });
@@ -56,15 +84,17 @@ export const updateMember = async (req, res) => {
 
 export const deleteMember = async (req, res) => {
   try {
-    const member = await Member.findByIdAndDelete(req.params.id);
+    const member = await deleteMemberService(
+      req.params.id
+    );
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Member deleted successfully",
       data: member,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(400).json({
       success: false,
       message: error.message,
     });
